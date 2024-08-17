@@ -26,6 +26,7 @@
 <body>
 
 <div class="full-page">
+    <img src="./logo.png" alt="Logo">
     <div>
     <h1>PuppyRaffle Audit Report</h1>
     <h3>Prepared by: Jack Landon</h3>
@@ -36,7 +37,7 @@
 </html>
 
 Prepared by: [Jack Landon](https://sveltekit.io) on 2024-08-13
-Lead Auditors:
+Lead Auditor:
 
 - Jack Landon
 
@@ -48,6 +49,12 @@ Lead Auditors:
 - [Risk Classification](#risk-classification)
 - [Audit Details](#audit-details)
   - [Scope](#scope)
+  - [Roles](#roles)
+- [Executive Summary](#executive-summary)
+  - [Issues found](#issues-found)
+- [Findings](#findings)
+  - [High Severity](#high-severity)
+    - [\[H-1\] Reentrancy vulnerability in `PuppyRaffle::refund` function can be exploited to all native balance in the contract.](#h-1-reentrancy-vulnerability-in-puppyrafflerefund-function-can-be-exploited-to-all-native-balance-in-the-contract)
     - [\[H-2\] Weak Randomness in the `PuppyRaffle::selectWinner` function can be exploited to predict the winner.](#h-2-weak-randomness-in-the-puppyraffleselectwinner-function-can-be-exploited-to-predict-the-winner)
   - [Medium Severity](#medium-severity)
     - [\[M-1\] Unbounded Array looping in `PuppyRaffle:enterRaffle` function can prevent new players from entering the raffle.](#m-1-unbounded-array-looping-in-puppyraffleenterraffle-function-can-prevent-new-players-from-entering-the-raffle)
@@ -101,15 +108,15 @@ We use the [CodeHawks](https://docs.codehawks.com/hawks-auditors/how-to-evaluate
 - Commit Hash: e30d199697bbc822b646d76533b66b7d529b8ef5
 - In Scope:
 
-````
+```
 ./src/
 #-- PuppyRaffle.sol
+```
 
 ## Roles
 
 Owner - Deployer of the protocol, has the power to change the wallet address to which fees are sent through the `changeFeeAddress` function.
 Player - Participant of the raffle, has the power to enter the raffle with the `enterRaffle` function and refund value through `refund` function.
-
 
 # Executive Summary
 
@@ -127,8 +134,7 @@ It would be worth addressing the informational findings first, and then moving f
 | LOW           | 2                      |
 | INFORMATIONAL | 6                      |
 | Gas           | 2                      |
-| TOTAL         | 16                      |
-
+| TOTAL         | 16                     |
 
 # Findings
 
@@ -153,7 +159,7 @@ The vulnerable function for reentrancy is the `PuppyRaffle::refund` function:
         players[playerIndex] = address(0);
         emit RaffleRefunded(playerAddress);
     }
-````
+```
 
 </details>
 
